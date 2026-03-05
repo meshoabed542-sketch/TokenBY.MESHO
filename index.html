@@ -22,12 +22,14 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+        
         /* تأثير البطاقات */
         .stat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
         }
+        
         /* زر الفحص */
         .check-btn {
             background: linear-gradient(45deg, #4f46e5, #7c3aed);
@@ -41,11 +43,142 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        /* نافذة العرض المنبثقة */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #2a2a40 0%, #1e1e2f 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+        
+        /* تنسيق محتوى النافذة */
+        .token-detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        .token-detail-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+        .token-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .token-index {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .copy-btn:hover {
+            background: rgba(124, 58, 237, 0.3);
+            border-color: #7c3aed;
+        }
+        .token-text {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            color: #a5b4fc;
+            margin-bottom: 12px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .info-badge {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .info-badge.good { color: #4ade80; }
+        .info-badge.bad { color: #f87171; }
+        .info-badge.neutral { color: #fbbf24; }
+        
         /* رسائل الخطأ */
         .error-message {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid rgba(239, 68, 68, 0.5);
             color: #fecaca;
+        }
+        
+        /* زر النسخ في الجدول */
+        .copy-row-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            color: white;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 4px;
+        }
+        .copy-row-btn:hover {
+            background: rgba(124, 58, 237, 0.3);
         }
     </style>
 </head>
@@ -225,7 +358,7 @@
                 </div>
             </div>
 
-            <!-- علامات -->
+            <!-- مميز -->
             <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -289,6 +422,24 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة العرض المنبثقة -->
+    <div id="viewModal" class="modal-overlay">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-list text-purple-400"></i>
+                    <span id="modalTitle">نتائج الفحص</span>
+                </h3>
+                <button onclick="closeModal()" class="text-white/60 hover:text-white transition text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="space-y-3">
+                <!-- المحتوى هنا -->
             </div>
         </div>
     </div>
@@ -360,7 +511,7 @@
                     // تصنيف النتيجة
                     if (result.status === 'working') {
                         results.working.push(token);
-                        if (result.nitro || result.payment) {
+                        if (result.nitro !== '❌' || result.payment === '💳') {
                             results.flags.push(token);
                         }
                     } else if (result.status === 'emailLocked') {
@@ -440,7 +591,7 @@
                 const nitro = data.premium_type > 0;
                 const nitroType = data.premium_type === 2 ? '💎 Nitro' : (data.premium_type === 1 ? '⭐ Nitro Classic' : '❌');
                 
-                // تحقق من وسائل الدفع (نحتاج طلب إضافي)
+                // تحقق من وسائل الدفع
                 let hasPayment = false;
                 try {
                     const billingResponse = await fetch('https://discord.com/api/v9/users/@me/billing/payment-sources', {
@@ -457,7 +608,7 @@
                 // تحديد الحالة
                 let status = 'working';
                 if (!emailVerified && !phoneVerified) {
-                    status = 'invalid'; // نادر لكن ممكن
+                    status = 'invalid';
                 } else if (!emailVerified) {
                     status = 'emailLocked';
                 } else if (!phoneVerified) {
@@ -528,11 +679,11 @@
                     <td class="py-3 px-4">${item.nitro || '❌'}</td>
                     <td class="py-3 px-4">${item.payment || '❌'}</td>
                     <td class="py-3 px-4">
-                        <button class="text-white/40 hover:text-white transition mx-1" onclick="copyToken('${item.token}')" title="نسخ">
-                            <i class="fas fa-copy"></i>
+                        <button class="copy-row-btn" onclick="copySingleToken('${item.token}', ${index})" title="نسخ التوكن">
+                            <i class="fas fa-copy"></i> نسخ
                         </button>
-                        <button class="text-white/40 hover:text-white transition mx-1" onclick="viewDetails('${item.token}')" title="تفاصيل">
-                            <i class="fas fa-info-circle"></i>
+                        <button class="copy-row-btn" onclick="viewSingleDetails(${index})" title="عرض التفاصيل">
+                            <i class="fas fa-info-circle"></i> تفاصيل
                         </button>
                     </td>
                 `;
@@ -540,12 +691,143 @@
             });
         }
 
-        // ==================== دوال مساعدة ====================
-        function showError(msg) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = msg;
-            errorDiv.classList.remove('hidden');
-            setTimeout(() => errorDiv.classList.add('hidden'), 5000);
+        // ==================== دوال العرض والنسخ ====================
+        function viewResults(type) {
+            let list = [];
+            let title = '';
+            
+            switch(type) {
+                case 'working':
+                    list = results.working;
+                    title = 'التوكنات الشغالة ✅';
+                    break;
+                case 'emailLocked':
+                    list = results.emailLocked;
+                    title = 'التوكنات مع بريد مقفل 🔒';
+                    break;
+                case 'phoneLocked':
+                    list = results.phoneLocked;
+                    title = 'التوكنات مع هاتف مقفل 📱';
+                    break;
+                case 'invalid':
+                    list = results.invalid;
+                    title = 'التوكنات غير الصالحة ❌';
+                    break;
+                case 'errors':
+                    list = results.errors;
+                    title = 'التوكنات مع أخطاء ⚠️';
+                    break;
+                case 'flags':
+                    list = results.flags;
+                    title = 'التوكنات المميزة 🏆';
+                    break;
+                default:
+                    return;
+            }
+            
+            if (list.length === 0) {
+                showError('لا توجد نتائج للعرض');
+                return;
+            }
+            
+            // إزالة التكرار
+            list = [...new Set(list)];
+            
+            // عرض النافذة
+            document.getElementById('modalTitle').textContent = title;
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = '';
+            
+            list.forEach((token, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'token-detail-item';
+                
+                // البحث عن تفاصيل إضافية
+                const details = allResults.find(r => r.token === token);
+                
+                itemDiv.innerHTML = `
+                    <div class="token-detail-header">
+                        <div class="token-index">${index + 1}</div>
+                        <button class="copy-btn" onclick="copyToken('${token}')">
+                            <i class="fas fa-copy"></i>
+                            نسخ التوكن
+                        </button>
+                    </div>
+                    <div class="token-text">${token}</div>
+                    ${details ? `
+                        <div class="info-grid">
+                            <div class="info-badge ${details.email === '✅' ? 'good' : 'bad'}">
+                                <i class="fas fa-envelope"></i> ${details.email === '✅' ? 'موثق' : 'غير موثق'}
+                            </div>
+                            <div class="info-badge ${details.phone === '✅' ? 'good' : 'bad'}">
+                                <i class="fas fa-phone"></i> ${details.phone === '✅' ? 'موثق' : 'غير موثق'}
+                            </div>
+                            <div class="info-badge ${details.nitro !== '❌' ? 'good' : 'neutral'}">
+                                <i class="fas fa-star"></i> ${details.nitro}
+                            </div>
+                            <div class="info-badge ${details.payment === '💳' ? 'good' : 'neutral'}">
+                                <i class="fas fa-credit-card"></i> ${details.payment === '💳' ? 'موجودة' : 'لا توجد'}
+                            </div>
+                        </div>
+                        <div class="text-xs text-white/40 mt-2">
+                            معرف: ${details.id || 'غير معروف'} | اسم: ${details.username || 'غير معروف'}
+                        </div>
+                    ` : ''}
+                `;
+                modalContent.appendChild(itemDiv);
+            });
+            
+            // إظهار النافذة
+            document.getElementById('viewModal').classList.add('show');
+        }
+
+        function viewSingleDetails(index) {
+            const item = allResults[index];
+            if (!item) return;
+            
+            document.getElementById('modalTitle').textContent = 'تفاصيل التوكن';
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="token-detail-item">
+                    <div class="token-detail-header">
+                        <div class="token-index">${index + 1}</div>
+                        <button class="copy-btn" onclick="copyToken('${item.token}')">
+                            <i class="fas fa-copy"></i>
+                            نسخ التوكن
+                        </button>
+                    </div>
+                    <div class="token-text">${item.token}</div>
+                    <div class="info-grid">
+                        <div class="info-badge ${item.email === '✅' ? 'good' : 'bad'}">
+                            <i class="fas fa-envelope"></i> ${item.email === '✅' ? 'موثق' : 'غير موثق'}
+                        </div>
+                        <div class="info-badge ${item.phone === '✅' ? 'good' : 'bad'}">
+                            <i class="fas fa-phone"></i> ${item.phone === '✅' ? 'موثق' : 'غير موثق'}
+                        </div>
+                        <div class="info-badge ${item.nitro !== '❌' ? 'good' : 'neutral'}">
+                            <i class="fas fa-star"></i> ${item.nitro}
+                        </div>
+                        <div class="info-badge ${item.payment === '💳' ? 'good' : 'neutral'}">
+                            <i class="fas fa-credit-card"></i> ${item.payment === '💳' ? 'موجودة' : 'لا توجد'}
+                        </div>
+                    </div>
+                    ${item.id ? `
+                        <div class="mt-3 p-3 bg-black/20 rounded-lg">
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div><span class="text-white/40">المعرف:</span> ${item.id}</div>
+                                <div><span class="text-white/40">الاسم:</span> ${item.username || 'غير معروف'}</div>
+                                ${item.bio ? `<div class="col-span-2"><span class="text-white/40">السيرة:</span> ${item.bio}</div>` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.getElementById('viewModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('viewModal').classList.remove('show');
         }
 
         function copyToken(token) {
@@ -553,21 +835,17 @@
             showError('✅ تم نسخ التوكن');
         }
 
-        function viewDetails(token) {
-            const result = allResults.find(r => r.token === token);
-            if (result) {
-                const details = `
-                    معرف الحساب: ${result.id || 'غير معروف'}
-                    اسم المستخدم: ${result.username || 'غير معروف'}
-                    البريد: ${result.email === '✅' ? 'موثق' : 'غير موثق'}
-                    الهاتف: ${result.phone === '✅' ? 'موثق' : 'غير موثق'}
-                    Nitro: ${result.nitro || 'لا يوجد'}
-                    وسائل دفع: ${result.payment === '💳' ? 'موجودة' : 'لا توجد'}
-                `;
-                alert(details);
-            } else {
-                alert('التوكن: ' + token);
-            }
+        function copySingleToken(token, index) {
+            navigator.clipboard.writeText(token);
+            showError(`✅ تم نسخ التوكن رقم ${index + 1}`);
+        }
+
+        // ==================== دوال مساعدة ====================
+        function showError(msg) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = msg;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => errorDiv.classList.add('hidden'), 3000);
         }
 
         function downloadResults(type) {
@@ -586,6 +864,9 @@
                 return;
             }
             
+            // إزالة التكرار
+            list = [...new Set(list)];
+            
             const blob = new Blob([list.join('\n')], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -593,25 +874,6 @@
             a.download = `${type}_tokens_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
             URL.revokeObjectURL(url);
-        }
-
-        function viewResults(type) {
-            let list = [];
-            switch(type) {
-                case 'working': list = results.working; break;
-                case 'emailLocked': list = results.emailLocked; break;
-                case 'phoneLocked': list = results.phoneLocked; break;
-                case 'invalid': list = results.invalid; break;
-                case 'errors': list = results.errors; break;
-                case 'flags': list = results.flags; break;
-            }
-            
-            if (list.length === 0) {
-                showError('لا توجد نتائج للعرض');
-                return;
-            }
-            
-            alert(list.join('\n'));
         }
 
         function exportAll() {
@@ -633,6 +895,13 @@
         function refreshResults() {
             updateUI();
         }
+
+        // إغلاق النافذة بالضغط خارجها
+        document.getElementById('viewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
