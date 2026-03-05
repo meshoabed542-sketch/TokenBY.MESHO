@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Checker Pro</title>
+    <!-- Tailwind CSS ??????? ?????? -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome ????????? -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- ????? ?? ???? ???? -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        /* ????? ???? ??????? */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+        /* ????? ????? ???????? */
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        /* ????? ?? ????? */
+        .check-btn {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            transition: all 0.3s ease;
+        }
+        .check-btn:hover {
+            background: linear-gradient(45deg, #4338ca, #6d28d9);
+            transform: scale(1.02);
+        }
+        /* ??????? ??????? */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-card {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body class="p-6">
+    <!-- ??????? ???????? -->
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- ???? ??????? ?? ??????? -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+                <i class="fas fa-shield-alt text-yellow-300"></i>
+                Token Checker Pro
+                <span class="text-sm bg-white/20 px-3 py-1 rounded-full">v2.0</span>
+            </h1>
+            <div class="flex gap-4 text-white/80">
+                <i class="fas fa-bell cursor-pointer hover:text-white transition"></i>
+                <i class="fas fa-cog cursor-pointer hover:text-white transition"></i>
+                <i class="fas fa-user-circle cursor-pointer hover:text-white transition text-2xl"></i>
+            </div>
+        </div>
+
+        <!-- ????? ????? ???????? -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-white/20 shadow-xl">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-1 h-8 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+                <h2 class="text-xl font-semibold text-white">????? ????????</h2>
+                <span class="text-white/40 text-sm">(???? ???? ?? ?? ???)</span>
+            </div>
+            
+            <!-- ????? ???? -->
+            <textarea id="tokensInput" 
+                      class="w-full h-40 bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-purple-400 transition resize-none"
+                      placeholder="???? ???????? ???...&#10;????: OTc2MzE4Mjg2MTc2MDMyNzM0.Gb3F8H.2wqJx5X7yL9nR3tV8bM2kP6sD4f"></textarea>
+            
+            <!-- ???? ??????? -->
+            <div class="flex justify-between items-center mt-4">
+                <div class="flex gap-3">
+                    <button onclick="pasteTokens()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
+                        <i class="fas fa-paste"></i>
+                        ???
+                    </button>
+                    <button onclick="clearTokens()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
+                        <i class="fas fa-trash"></i>
+                        ???
+                    </button>
+                    <button onclick="loadExample()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
+                        <i class="fas fa-file-alt"></i>
+                        ?????
+                    </button>
+                </div>
+                
+                <!-- ?? ????? ??????? -->
+                <button onclick="checkTokens()" class="check-btn px-8 py-3 rounded-xl text-white font-bold flex items-center gap-3 shadow-lg">
+                    <i class="fas fa-magic"></i>
+                    ??? ????????
+                    <span id="loadingSpinner" class="hidden">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ????? ??????? -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-8 bg-gradient-to-b from-green-400 to-emerald-400 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-white">???????</h2>
+            <div class="flex gap-2 mr-auto">
+                <span class="bg-white/20 text-white/80 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                    <i class="fas fa-clock"></i>
+                    ??? ?????: ????
+                </span>
+            </div>
+        </div>
+
+        <!-- ?????? ?????????? - 6 ?????? ?????? ??? ?????? -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+            
+            <!-- Working / ???? -->
+            <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="workingCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Working</div>
+                <div class="text-xs opacity-75">????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Email Locked / ????? ????? -->
+            <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="emailLockedCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Email Locked</div>
+                <div class="text-xs opacity-75">????? ?????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phone Locked / ?????? ????? -->
+            <div class="stat-card bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-phone text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="phoneLockedCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Phone Locked</div>
+                <div class="text-xs opacity-75">?????? ?????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Invalid / ??? ???? -->
+            <div class="stat-card bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-times-circle text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="invalidCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Invalid</div>
+                <div class="text-xs opacity-75">??? ????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Errors / ????? -->
+            <div class="stat-card bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="errorsCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Errors</div>
+                <div class="text-xs opacity-75">?????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flags / ?????? (??????) -->
+            <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-flag text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="flagsCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">Flags</div>
+                <div class="text-xs opacity-75">??????</div>
+                <div class="mt-3 flex gap-2">
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ???? ??????? ????????? -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-8 bg-gradient-to-b from-blue-400 to-cyan-400 rounded-full"></div>
+                    <h3 class="text-lg font-semibold text-white">?????? ?????</h3>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="exportAll()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white text-sm flex items-center gap-2 transition">
+                        <i class="fas fa-file-export"></i>
+                        ????? ????
+                    </button>
+                    <button onclick="refreshResults()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white text-sm flex items-center gap-2 transition">
+                        <i class="fas fa-sync-alt"></i>
+                        ?????
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ???? ??????? -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-white">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="text-right py-3 px-4">#</th>
+                            <th class="text-right py-3 px-4">??????</th>
+                            <th class="text-right py-3 px-4">??????</th>
+                            <th class="text-right py-3 px-4">??????</th>
+                            <th class="text-right py-3 px-4">??????</th>
+                            <th class="text-right py-3 px-4">Nitro</th>
+                            <th class="text-right py-3 px-4">?????????</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <!-- ?????? ????????????? -->
+                        <tr>
+                            <td colspan="7" class="text-center py-8 text-white/40">
+                                <i class="fas fa-inbox text-4xl mb-3 block"></i>
+                                ?? ???? ????? ???? ?? ?????? ?????? ?????
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript ??????? -->
+    <script>
+        // ??????? ????
+        let results = {
+            working: [],
+            emailLocked: [],
+            phoneLocked: [],
+            invalid: [],
+            errors: [],
+            flags: []
+        };
+
+        // ???? ??? ????????
+        function pasteTokens() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('tokensInput').value = text;
+            });
+        }
+
+        // ???? ??? ?????
+        function clearTokens() {
+            document.getElementById('tokensInput').value = '';
+        }
+
+        // ???? ????? ?????
+        function loadExample() {
+            document.getElementById('tokensInput').value = 
+                'OTc2MzE4Mjg2MTc2MDMyNzM0.Gb3F8H.2wqJx5X7yL9nR3tV8bM2kP6sD4f\n' +
+                'MTAzMjQ1Njc4OTAxMjM0NTY3.Gh5KjL.9xR4tY7uI2oP5aS8dF1gH3jK6l\n' +
+                'OTI4MzE3NjU0MzIxOTg3NjU0.Fd2GtH.4mN8bV2cX5zL7kP9qW1eR4tY6u';
+        }
+
+        // ???? ??? ???????? (??????)
+        function checkTokens() {
+            const tokens = document.getElementById('tokensInput').value.split('\n').filter(t => t.trim() !== '');
+            
+            if (tokens.length === 0) {
+                alert('?????? ????? ?????? ?????');
+                return;
+            }
+
+            // ????? loader
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            
+            // ?????? ????? ????? (?? ?????? ????? ????? ???)
+            setTimeout(() => {
+                // ????? ????? ????????
+                results = {
+                    working: tokens.filter((_, i) => i % 5 === 0),
+                    emailLocked: tokens.filter((_, i) => i % 5 === 1),
+                    phoneLocked: tokens.filter((_, i) => i % 5 === 2),
+                    invalid: tokens.filter((_, i) => i % 5 === 3),
+                    errors: tokens.filter((_, i) => i % 5 === 4),
+                    flags: tokens.filter((_, i) => i % 7 === 0)
+                };
+
+                // ????? ???????
+                updateUI();
+                
+                // ????? loader
+                document.getElementById('loadingSpinner').classList.add('hidden');
+            }, 1500);
+        }
+
+        // ????? ??????? ????????
+        function updateUI() {
+            // ????? ???????
+            document.getElementById('workingCount').textContent = results.working.length;
+            document.getElementById('emailLockedCount').textContent = results.emailLocked.length;
+            document.getElementById('phoneLockedCount').textContent = results.phoneLocked.length;
+            document.getElementById('invalidCount').textContent = results.invalid.length;
+            document.getElementById('errorsCount').textContent = results.errors.length;
+            document.getElementById('flagsCount').textContent = results.flags.length;
+
+            // ????? ??????
+            const tbody = document.getElementById('resultsTableBody');
+            tbody.innerHTML = '';
+
+            // ??? ?? ??????? ?? ?????? ????? ?????
+            const allResults = [
+                ...results.working.map(t => ({ token: t, status: 'working', email: '??', phone: '??', nitro: '??' })),
+                ...results.emailLocked.map(t => ({ token: t, status: 'emailLocked', email: '??', phone: '??', nitro: '?' })),
+                ...results.phoneLocked.map(t => ({ token: t, status: 'phoneLocked', email: '??', phone: '??', nitro: '?' })),
+                ...results.invalid.map(t => ({ token: t, status: 'invalid', email: '?', phone: '?', nitro: '?' })),
+                ...results.errors.map(t => ({ token: t, status: 'error', email: '??', phone: '??', nitro: '??' })),
+                ...results.flags.map(t => ({ token: t, status: 'flag', email: '??', phone: '??', nitro: '??' }))
+            ];
+
+            if (allResults.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-white/40"><i class="fas fa-inbox text-4xl mb-3 block"></i>?? ???? ????? ???</td></tr>';
+                return;
+            }
+
+            allResults.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-white/5 hover:bg-white/5 transition';
+                
+                // ????? ??? ??????
+                let statusColor = 'text-gray-400';
+                let statusText = '??? ?????';
+                
+                switch(item.status) {
+                    case 'working':
+                        statusColor = 'text-green-400';
+                        statusText = '????';
+                        break;
+                    case 'emailLocked':
+                        statusColor = 'text-orange-400';
+                        statusText = '????? ?????';
+                        break;
+                    case 'phoneLocked':
+                        statusColor = 'text-red-400';
+                        statusText = '?????? ?????';
+                        break;
+                    case 'invalid':
+                        statusColor = 'text-gray-500';
+                        statusText = '??? ????';
+                        break;
+                    case 'error':
+                        statusColor = 'text-yellow-400';
+                        statusText = '???';
+                        break;
+                    case 'flag':
+                        statusColor = 'text-purple-400';
+                        statusText = '?????';
+                        break;
+                }
+
+                row.innerHTML = `
+                    <td class="py-3 px-4 text-white/60">${index + 1}</td>
+                    <td class="py-3 px-4 font-mono text-sm">${item.token.substring(0, 30)}...</td>
+                    <td class="py-3 px-4"><span class="${statusColor} font-semibold">${statusText}</span></td>
+                    <td class="py-3 px-4">${item.email}</td>
+                    <td class="py-3 px-4">${item.phone}</td>
+                    <td class="py-3 px-4">${item.nitro}</td>
+                    <td class="py-3 px-4">
+                        <button class="text-white/40 hover:text-white transition mx-1" onclick="copyToken('${item.token}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="text-white/40 hover:text-white transition mx-1" onclick="viewDetails('${item.token}')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // ???? ??????
+        function copyToken(token) {
+            navigator.clipboard.writeText(token);
+            alert('?? ?????!');
+        }
+
+        function viewDetails(token) {
+            alert(`?????? ??????:\n${token}\n\n??? ????? ??????? ?????? ?? ??????`);
+        }
+
+        function exportAll() {
+            alert('???? ????? ???? ??????? ??? ???');
+        }
+
+        function refreshResults() {
+            updateUI();
+        }
+
+        // ????? ????
+        document.addEventListener('DOMContentLoaded', () => {
+            // ?? ??? ??????? ??????
+        });
+    </script>
+</body>
+</html>
