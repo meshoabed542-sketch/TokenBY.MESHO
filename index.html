@@ -137,8 +137,9 @@
             </div>
         </div>
 
-        <!-- بطاقة واحدة فقط: شغال -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 gap-4 mb-8">
+        <!-- بطاقات النتائج -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <!-- شغال -->
             <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -146,13 +147,53 @@
                     </div>
                     <span class="text-3xl font-bold" id="workingCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">شغال ✅</div>
-                <div class="text-xs opacity-75">كل التوكنات الصالحة</div>
+                <div class="text-sm opacity-90">✅ شغال</div>
+                <div class="text-xs opacity-75">حسابات كاملة بدون رسائل</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('working')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
                     </button>
                     <button onclick="viewResults('working')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> عرض
+                    </button>
+                </div>
+            </div>
+
+            <!-- Verify by Email -->
+            <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="emailVerifyCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">📧 Verify by Email</div>
+                <div class="text-xs opacity-75">يحتاج توثيق البريد</div>
+                <div class="mt-3 flex gap-2">
+                    <button onclick="downloadResults('emailVerify')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> تحميل
+                    </button>
+                    <button onclick="viewResults('emailVerify')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> عرض
+                    </button>
+                </div>
+            </div>
+
+            <!-- Verify by Phone -->
+            <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-phone-alt text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="phoneVerifyCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">📱 Verify by Phone</div>
+                <div class="text-xs opacity-75">يحتاج توثيق الهاتف</div>
+                <div class="mt-3 flex gap-2">
+                    <button onclick="downloadResults('phoneVerify')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> تحميل
+                    </button>
+                    <button onclick="viewResults('phoneVerify')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-eye"></i> عرض
                     </button>
                 </div>
@@ -211,14 +252,14 @@
 
     <script>
         const DISCORD_API = 'https://discord.com/api/v9/users/@me';
-        let results = { working: [], invalid: [], errors: [] };
+        let results = { working: [], emailVerify: [], phoneVerify: [] };
         let allResults = [];
 
         function pasteTokens() { navigator.clipboard.readText().then(text => document.getElementById('tokensInput').value = text); }
         function clearTokens() { document.getElementById('tokensInput').value = ''; }
         function loadExample() {
             document.getElementById('tokensInput').value = 
-                '4';
+                'M';   // شغال
         }
 
         function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -236,32 +277,44 @@
             setTimeout(() => e.classList.add('hidden'), 5000);
         }
 
-        // ==================== التصنيف حسب طلبك (كل التوكنات شغال) ====================
-        function classifyToken(data) {
-            if (!data || !data.id) {
-                return { status: 'invalid', email: '❌', phone: '❌', nitro: '❌', mfa: '❌', message: '❌ غير صالح' };
+        // ==================== التصنيف بناءً على رسائل ديسكورد ====================
+        function classifyToken(data, statusCode) {
+            // التحقق من وجود رسائل Verify
+            if (data.message) {
+                if (data.message.includes('phone') || data.phone_verify) {
+                    return { status: 'phoneVerify', message: '📱 Verify by Phone', email: '🔒', phone: '🔒' };
+                }
+                if (data.message.includes('email') || data.message.includes('verify your account')) {
+                    return { status: 'emailVerify', message: '📧 Verify by Email', email: '🔒', phone: '🔒' };
+                }
+            }
+
+            // إذا جاب بيانات المستخدم
+            if (data.id) {
+                return {
+                    status: 'working',
+                    email: data.verified ? '✅' : '🔒',
+                    phone: data.phone ? '✅' : '🔒',
+                    nitro: data.premium_type > 0 ? '💎' : '❌',
+                    mfa: data.mfa_enabled ? '🔐' : '🔓',
+                    username: data.username,
+                    id: data.id,
+                    message: '✅ شغال'
+                };
             }
             
-            // أي توكن جاب بيانات = شغال
-            return {
-                status: 'working',
-                email: data.verified ? '✅' : '🔒',
-                phone: data.phone ? '✅' : '🔒',
-                nitro: data.premium_type > 0 ? '💎' : '❌',
-                mfa: data.mfa_enabled ? '🔐' : '🔓',
-                username: data.username,
-                id: data.id,
-                message: '✅ توكن شغال'
-            };
+            return { status: 'error', message: '⚠️ حالة غير معروفة' };
         }
 
         async function checkSingleToken(token) {
             try {
                 const r = await fetch(DISCORD_API, { headers: { 'Authorization': token } });
                 const d = await r.json();
-                if (r.status === 401) return { status: 'invalid', message: '❌ غير صالح' };
-                if (!r.ok) return { status: 'error', message: `خطأ ${r.status}` };
-                return { token, ...classifyToken(d) };
+                
+                if (r.status === 401) return { status: 'error', message: '❌ غير صالح' };
+                
+                const result = classifyToken(d, r.status);
+                return { token, ...result };
             } catch (e) {
                 return { token, status: 'error', message: '🌐 فشل الاتصال' };
             }
@@ -271,7 +324,7 @@
             const tokens = document.getElementById('tokensInput').value.split('\n').map(t => t.trim()).filter(t => t.length);
             if (!tokens.length) { showError('أدخل توكنات'); return; }
             
-            results = { working: [], invalid: [], errors: [] };
+            results = { working: [], emailVerify: [], phoneVerify: [] };
             allResults = [];
             
             document.getElementById('loadingSpinner').classList.remove('hidden');
@@ -281,9 +334,11 @@
             
             for (let i = 0; i < tokens.length; i++) {
                 const r = await checkSingleToken(tokens[i]);
+                
                 if (r.status === 'working') results.working.push(tokens[i]);
-                else if (r.status === 'invalid') results.invalid.push(tokens[i]);
-                else results.errors.push(tokens[i]);
+                else if (r.status === 'emailVerify') results.emailVerify.push(tokens[i]);
+                else if (r.status === 'phoneVerify') results.phoneVerify.push(tokens[i]);
+                
                 allResults.push({ token: tokens[i], ...r });
                 updateUI();
                 document.getElementById('progressFill').style.width = Math.round(((i+1)/tokens.length)*100) + '%';
@@ -299,6 +354,9 @@
 
         function updateUI() {
             document.getElementById('workingCount').textContent = results.working.length;
+            document.getElementById('emailVerifyCount').textContent = results.emailVerify.length;
+            document.getElementById('phoneVerifyCount').textContent = results.phoneVerify.length;
+            
             const tbody = document.getElementById('resultsTableBody');
             tbody.innerHTML = '';
             if (!allResults.length) {
@@ -310,8 +368,10 @@
                 row.className = 'border-b border-white/5 hover:bg-white/5 transition';
                 let statusText = '', statusClass = '';
                 if (item.status === 'working') { statusText = '✅ شغال'; statusClass = 'text-green-400'; }
-                else if (item.status === 'invalid') { statusText = '❌ غير صالح'; statusClass = 'text-red-400'; }
+                else if (item.status === 'emailVerify') { statusText = '📧 Verify Email'; statusClass = 'text-blue-400'; }
+                else if (item.status === 'phoneVerify') { statusText = '📱 Verify Phone'; statusClass = 'text-orange-400'; }
                 else { statusText = '⚠️ خطأ'; statusClass = 'text-yellow-400'; }
+                
                 row.innerHTML = `
                     <td class="py-3 px-4 text-white/60">${i+1}</td>
                     <td class="py-3 px-4 font-mono text-sm">${item.token?.substring(0,30)}...</td>
@@ -331,7 +391,13 @@
 
         function viewResults(type) {
             if (!results[type]?.length) { showError('لا توجد نتائج'); return; }
-            document.getElementById('modalTitle').textContent = 'التوكنات الشغالة ✅';
+            
+            let title = '';
+            if (type === 'working') title = 'التوكنات الشغالة ✅';
+            else if (type === 'emailVerify') title = 'التوكنات Verify by Email 📧';
+            else if (type === 'phoneVerify') title = 'التوكنات Verify by Phone 📱';
+            
+            document.getElementById('modalTitle').textContent = title;
             const mc = document.getElementById('modalContent');
             mc.innerHTML = '';
             results[type].forEach((token, i) => {
@@ -343,7 +409,7 @@
                             <button class="copy-btn" onclick="copyToken('${token}')"><i class="fas fa-copy"></i> نسخ</button>
                         </div>
                         <div class="token-text">${token}</div>
-                        ${d?.message ? `<div class="text-sm text-green-400">${d.message}</div>` : ''}
+                        ${d?.message ? `<div class="text-sm ${type === 'working' ? 'text-green-400' : type === 'emailVerify' ? 'text-blue-400' : 'text-orange-400'}">${d.message}</div>` : ''}
                     </div>
                 `;
             });
@@ -353,6 +419,11 @@
         function viewDetails(i) {
             const item = allResults[i];
             if (!item) return;
+            
+            let colorClass = 'text-green-400';
+            if (item.status === 'emailVerify') colorClass = 'text-blue-400';
+            else if (item.status === 'phoneVerify') colorClass = 'text-orange-400';
+            
             document.getElementById('modalTitle').textContent = 'تفاصيل التوكن';
             document.getElementById('modalContent').innerHTML = `
                 <div class="token-detail-item">
@@ -362,7 +433,7 @@
                     </div>
                     <div class="token-text">${item.token}</div>
                     <div class="space-y-2">
-                        <div class="text-white/80">${item.message || ''}</div>
+                        <div class="${colorClass}">${item.message || ''}</div>
                         <div class="grid grid-cols-2 gap-2 text-sm">
                             <div>البريد: ${item.email || '❌'}</div>
                             <div>الهاتف: ${item.phone || '❌'}</div>
