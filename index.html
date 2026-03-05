@@ -310,7 +310,7 @@
             </div>
         </div>
 
-        <!-- بطاقات النتائج - 7 بطاقات الآن -->
+        <!-- بطاقات النتائج -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 mb-8">
             
             <!-- شغال -->
@@ -373,7 +373,7 @@
                 </div>
             </div>
 
-            <!-- توثيق هاتف مطلوب -->
+            <!-- يحتاج توثيق هاتف -->
             <div class="stat-card bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -381,8 +381,8 @@
                     </div>
                     <span class="text-3xl font-bold" id="phoneVerifyCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">توثيق هاتف 📞</div>
-                <div class="text-xs opacity-75">يحتاج توثيق برقم هاتف</div>
+                <div class="text-sm opacity-90">يحتاج توثيق هاتف 📞</div>
+                <div class="text-xs opacity-75">يحتاج إدخال رمز هاتف</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('phoneVerify')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
@@ -393,7 +393,7 @@
                 </div>
             </div>
 
-            <!-- كابتشا مطلوبة -->
+            <!-- يحتاج كابتشا -->
             <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -401,7 +401,7 @@
                     </div>
                     <span class="text-3xl font-bold" id="captchaCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">كابتشا 🤖</div>
+                <div class="text-sm opacity-90">يحتاج كابتشا 🤖</div>
                 <div class="text-xs opacity-75">يحتاج حل كابتشا</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('captcha')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
@@ -673,7 +673,7 @@
                 `آخر تحديث: ${new Date().toLocaleTimeString('ar-EG')}`;
         }
 
-        // ==================== دالة فحص توكن واحد مع كشف الأخطاء ====================
+        // ==================== دالة فحص توكن واحد مع كشف الأخطاء بدقة ====================
         async function checkSingleTokenAdvanced(token) {
             try {
                 const response = await fetch(DISCORD_API, {
@@ -687,33 +687,56 @@
 
                 // ========== كشف حالات الخطأ المختلفة ==========
                 
-                // 1. توكن غير صالح
+                // 1. توكن غير صالح (Unauthorized)
                 if (response.status === 401) {
-                    return createErrorResult('invalid', 'توكن غير صالح');
+                    return createErrorResult('invalid', 'توكن غير صالح', '❌');
                 }
                 
-                // 2. ممنوع الوصول - غالباً يحتاج توثيق
+                // 2. ممنوع الوصول - نحتاج تحليل المشكلة بدقة
                 if (response.status === 403) {
                     try {
                         const data = await response.json();
                         
-                        // تحقق من وجود طلب توثيق هاتف
-                        if (data.phone_verify || data.message?.includes('phone')) {
-                            return createErrorResult('phoneVerify', 'يحتاج توثيق هاتف', '📞');
+                        // تحقق من وجود رمز الخطأ
+                        const errorCode = data.code;
+                        const errorMessage = data.message || '';
+                        
+                        // الحالة 1: يحتاج توثيق هاتف (Phone Locked)
+                        if (data.phone_verify || 
+                            errorCode === 40002 || 
+                            errorMessage.includes('verify your account') ||
+                            errorMessage.includes('phone')) {
+                            
+                            return {
+                                status: 'phoneLocked',  // نصنفه كمقفول هاتف
+                                email: '✅',  // البريد موثق (عادة)
+                                phone: '🔒',  // الهاتف غير موثق
+                                nitro: '❌',
+                                payment: '❌',
+                                mfa: '❌',
+                                message: 'مقفول هاتف - يحتاج توثيق برقم هاتف',
+                                username: null,
+                                id: null,
+                                created_at: null,
+                                requires_phone: true
+                            };
                         }
                         
-                        // تحقق من وجود كابتشا
+                        // الحالة 2: يحتاج كابتشا
                         if (data.captcha_key || data.captcha_sitekey) {
                             return createErrorResult('captcha', 'يحتاج حل كابتشا', '🤖');
                         }
                         
-                        // تحقق من وجود 2FA
-                        if (data.mfa_required || data.message?.includes('2FA')) {
+                        // الحالة 3: يحتاج توثيق ثنائي (2FA)
+                        if (data.mfa_required || errorMessage.includes('2FA')) {
                             return createErrorResult('mfa', 'يحتاج توثيق ثنائي', '🔐');
                         }
                         
+                        // الحالة 4: حساب مقفول بشكل عام
                         return createErrorResult('locked', 'حساب مقفول', '🔒');
+                        
                     } catch (e) {
+                        // لو فشل تحليل JSON، نعتبره مقفول
                         return createErrorResult('locked', 'حساب مقفول', '🔒');
                     }
                 }
@@ -762,14 +785,14 @@
                     }
                 } catch (e) {}
 
-                // تحديد الحالة
+                // تحديد الحالة بدقة
                 let status = 'working';
                 if (!emailVerified && !phoneVerified) {
                     status = 'invalid';
-                } else if (!emailVerified) {
+                } else if (!emailVerified && phoneVerified) {
                     status = 'emailLocked';
-                } else if (!phoneVerified) {
-                    status = 'phoneLocked';
+                } else if (!phoneVerified && emailVerified) {
+                    status = 'phoneLocked';  // هذا هو المهم - هاتف غير موثق وبريد موثق
                 }
 
                 // حساب تاريخ الإنشاء
@@ -831,22 +854,28 @@
             }
         }
 
-        // ==================== تصنيف التوكن ====================
+        // ==================== تصنيف التوكن بشكل صحيح ====================
         async function categorizeToken(token, result) {
             // إضافة للنتائج حسب الحالة
             if (result.status === 'working') {
                 results.working.push(token);
-            } else if (result.status === 'emailLocked') {
+            } 
+            else if (result.status === 'emailLocked') {
                 results.emailLocked.push(token);
-            } else if (result.status === 'phoneLocked') {
+            } 
+            else if (result.status === 'phoneLocked') {
                 results.phoneLocked.push(token);
-            } else if (result.status === 'phoneVerify') {
+            } 
+            else if (result.status === 'phoneVerify') {
                 results.phoneVerify.push(token);
-            } else if (result.status === 'captcha') {
+            } 
+            else if (result.status === 'captcha') {
                 results.captcha.push(token);
-            } else if (result.status === 'invalid') {
+            } 
+            else if (result.status === 'invalid') {
                 results.invalid.push(token);
-            } else {
+            } 
+            else {
                 results.errors.push(token);
             }
             
@@ -1103,7 +1132,8 @@
             
             const total = allResults.length;
             const valid = results.working.length;
-            const locked = results.emailLocked.length + results.phoneLocked.length;
+            const phoneLocked = results.phoneLocked.length;
+            const emailLocked = results.emailLocked.length;
             const phoneVerify = results.phoneVerify.length;
             const captcha = results.captcha.length;
             const invalid = results.invalid.length;
@@ -1147,12 +1177,12 @@
                         <div class="text-3xl font-bold text-purple-400">${nitroCount}</div>
                     </div>
                     <div class="bg-white/5 p-4 rounded-xl">
-                        <div class="text-white/40 text-sm">مقفول</div>
-                        <div class="text-3xl font-bold text-orange-400">${locked}</div>
+                        <div class="text-white/40 text-sm">مقفول هاتف</div>
+                        <div class="text-3xl font-bold text-red-400">${phoneLocked}</div>
                     </div>
                     <div class="bg-white/5 p-4 rounded-xl">
-                        <div class="text-white/40 text-sm">يحتاج توثيق</div>
-                        <div class="text-3xl font-bold text-orange-400">${phoneVerify + captcha}</div>
+                        <div class="text-white/40 text-sm">مقفول بريد</div>
+                        <div class="text-3xl font-bold text-orange-400">${emailLocked}</div>
                     </div>
                 </div>
                 
