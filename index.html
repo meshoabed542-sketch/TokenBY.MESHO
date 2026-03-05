@@ -155,10 +155,6 @@
         .info-badge.good { color: #4ade80; }
         .info-badge.bad { color: #f87171; }
         .info-badge.neutral { color: #fbbf24; }
-        .info-badge.warning { color: #fbbf24; }
-        .info-badge.phone-verify { color: #f97316; }
-        .info-badge.captcha { color: #a855f7; }
-        .info-badge.locked { color: #ef4444; }
         
         /* الإشعارات */
         .notification {
@@ -177,7 +173,6 @@
         .notification.success { background: linear-gradient(135deg, #10b981, #059669); }
         .notification.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .notification.info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .notification.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
         
         @keyframes slideDown {
             from {
@@ -239,8 +234,8 @@
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-white flex items-center gap-3">
                 <i class="fas fa-shield-halbed text-yellow-300"></i>
-                <span>فاحص التوكنات المتطور</span>
-                <span class="text-sm bg-white/20 px-3 py-1 rounded-full">v5.0</span>
+                <span>فاحص التوكنات</span>
+                <span class="text-sm bg-white/20 px-3 py-1 rounded-full">الإصدار النهائي</span>
             </h1>
             <div class="flex gap-4 text-white/80">
                 <i class="fas fa-bell cursor-pointer hover:text-white transition"></i>
@@ -311,9 +306,9 @@
         </div>
 
         <!-- بطاقات النتائج -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
             
-            <!-- شغال -->
+            <!-- شغال بالكامل -->
             <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -321,8 +316,8 @@
                     </div>
                     <span class="text-3xl font-bold" id="workingCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">شغال ✅</div>
-                <div class="text-xs opacity-75">توكن صالح بالكامل</div>
+                <div class="text-sm opacity-90">شغال بالكامل ✅</div>
+                <div class="text-xs opacity-75">بريد وهاتف موثقين</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('working')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
@@ -333,36 +328,16 @@
                 </div>
             </div>
 
-            <!-- بريد مقفل -->
+            <!-- Phone Locked (بريد موثق + هاتف غير موثق) -->
             <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-envelope text-xl"></i>
-                    </div>
-                    <span class="text-3xl font-bold" id="emailLockedCount">0</span>
-                </div>
-                <div class="text-sm opacity-90">بريد غير موثق 🔒</div>
-                <div class="text-xs opacity-75">البريد الإلكتروني يحتاج توثيق</div>
-                <div class="mt-3 flex gap-2">
-                    <button onclick="downloadResults('emailLocked')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
-                        <i class="fas fa-download"></i> تحميل
-                    </button>
-                    <button onclick="viewResults('emailLocked')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
-                        <i class="fas fa-eye"></i> عرض
-                    </button>
-                </div>
-            </div>
-
-            <!-- هاتف مقفل (Verify Phone) -->
-            <div class="stat-card bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                         <i class="fas fa-phone-alt text-xl"></i>
                     </div>
                     <span class="text-3xl font-bold" id="phoneLockedCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">Verify Phone 📱</div>
-                <div class="text-xs opacity-75">يحتاج توثيق برقم هاتف</div>
+                <div class="text-sm opacity-90">Phone Locked 📱</div>
+                <div class="text-xs opacity-75">بريد موثق - هاتف غير موثق</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('phoneLocked')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
@@ -373,28 +348,48 @@
                 </div>
             </div>
 
-            <!-- يحتاج كابتشا -->
-            <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
+            <!-- Email Locked (بريد غير موثق + هاتف موثق) -->
+            <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-robot text-xl"></i>
+                        <i class="fas fa-envelope text-xl"></i>
                     </div>
-                    <span class="text-3xl font-bold" id="captchaCount">0</span>
+                    <span class="text-3xl font-bold" id="emailLockedCount">0</span>
                 </div>
-                <div class="text-sm opacity-90">يحتاج كابتشا 🤖</div>
-                <div class="text-xs opacity-75">يحتاج حل كابتشا</div>
+                <div class="text-sm opacity-90">Email Locked 🔒</div>
+                <div class="text-xs opacity-75">بريد غير موثق - هاتف موثق</div>
                 <div class="mt-3 flex gap-2">
-                    <button onclick="downloadResults('captcha')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                    <button onclick="downloadResults('emailLocked')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
                     </button>
-                    <button onclick="viewResults('captcha')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                    <button onclick="viewResults('emailLocked')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-eye"></i> عرض
+                    </button>
+                </div>
+            </div>
+
+            <!-- غير موثق (كلاهما غير موثق) -->
+            <div class="stat-card bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-question-circle text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="unverifiedCount">0</span>
+                </div>
+                <div class="text-sm opacity-90">غير موثق ⚠️</div>
+                <div class="text-xs opacity-75">بريد وهاتف غير موثقين</div>
+                <div class="mt-3 flex gap-2">
+                    <button onclick="downloadResults('unverified')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
+                        <i class="fas fa-download"></i> تحميل
+                    </button>
+                    <button onclick="viewResults('unverified')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-eye"></i> عرض
                     </button>
                 </div>
             </div>
 
             <!-- غير صالح -->
-            <div class="stat-card bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl p-5 text-white shadow-lg">
+            <div class="stat-card bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                         <i class="fas fa-times-circle text-xl"></i>
@@ -408,26 +403,6 @@
                         <i class="fas fa-download"></i> تحميل
                     </button>
                     <button onclick="viewResults('invalid')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
-                        <i class="fas fa-eye"></i> عرض
-                    </button>
-                </div>
-            </div>
-
-            <!-- محظور -->
-            <div class="stat-card bg-gradient-to-br from-red-700 to-red-800 rounded-2xl p-5 text-white shadow-lg">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-ban text-xl"></i>
-                    </div>
-                    <span class="text-3xl font-bold" id="bannedCount">0</span>
-                </div>
-                <div class="text-sm opacity-90">محظور ⛔</div>
-                <div class="text-xs opacity-75">حساب محظور أو مقفل</div>
-                <div class="mt-3 flex gap-2">
-                    <button onclick="downloadResults('banned')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
-                        <i class="fas fa-download"></i> تحميل
-                    </button>
-                    <button onclick="viewResults('banned')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-eye"></i> عرض
                     </button>
                 </div>
@@ -465,10 +440,6 @@
                     <button onclick="exportAll()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white text-sm flex items-center gap-2 transition">
                         <i class="fas fa-file-export"></i>
                         تصدير الكل
-                    </button>
-                    <button onclick="showAdvancedStats()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white text-sm flex items-center gap-2 transition">
-                        <i class="fas fa-chart-bar"></i>
-                        إحصائيات
                     </button>
                 </div>
             </div>
@@ -519,35 +490,16 @@
         </div>
     </div>
 
-    <!-- نافذة الإحصائيات -->
-    <div id="statsModal" class="modal-overlay">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
-                    <i class="fas fa-chart-pie text-purple-400"></i>
-                    <span>إحصائيات متقدمة</span>
-                </h3>
-                <button onclick="closeStatsModal()" class="text-white/60 hover:text-white transition text-xl">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="statsContent" class="space-y-4">
-                <!-- المحتوى هنا -->
-            </div>
-        </div>
-    </div>
-
     <script>
         // ==================== الإعدادات الأساسية ====================
         const DISCORD_API = 'https://discord.com/api/v9/users/@me';
         
         let results = {
             working: [],
-            emailLocked: [],
             phoneLocked: [],
-            captcha: [],
+            emailLocked: [],
+            unverified: [],
             invalid: [],
-            banned: [],
             errors: []
         };
         let allResults = [];
@@ -566,7 +518,7 @@
         function loadExample() {
             document.getElementById('tokensInput').value = 
                
-                'h';
+                'ج';
         }
 
         // ==================== دالة النوم ====================
@@ -594,7 +546,158 @@
             setTimeout(() => errorDiv.classList.add('hidden'), 5000);
         }
 
-        // ==================== الفحص المتطور مع كشف دقيق ====================
+        // ==================== دالة التصنيف حسب طريقتي ====================
+        function classifyToken(data) {
+            // التحقق من وجود بيانات
+            if (!data || !data.id) {
+                return {
+                    status: 'invalid',
+                    email: '❌',
+                    phone: '❌',
+                    nitro: '❌',
+                    mfa: '❌',
+                    message: '❌ توكن غير صالح'
+                };
+            }
+
+            // تحديد حالة التوثيق
+            const emailVerified = data.verified === true;
+            const phoneVerified = !!data.phone;  // true إذا كان فيه رقم هاتف
+            
+            // الحالة 1: Phone Locked (بريد موثق + هاتف غير موثق)
+            if (emailVerified && !phoneVerified) {
+                return {
+                    status: 'phoneLocked',
+                    email: '✅',
+                    phone: '🔒',
+                    nitro: data.premium_type > 0 ? '💎' : '❌',
+                    mfa: data.mfa_enabled ? '🔐' : '🔓',
+                    username: data.username,
+                    id: data.id,
+                    message: '📱 Phone Locked - البريد موثق والهاتف غير موثق'
+                };
+            }
+            
+            // الحالة 2: Email Locked (بريد غير موثق + هاتف موثق)
+            if (!emailVerified && phoneVerified) {
+                return {
+                    status: 'emailLocked',
+                    email: '🔒',
+                    phone: '✅',
+                    nitro: data.premium_type > 0 ? '💎' : '❌',
+                    mfa: data.mfa_enabled ? '🔐' : '🔓',
+                    username: data.username,
+                    id: data.id,
+                    message: '🔒 Email Locked - البريد غير موثق والهاتف موثق'
+                };
+            }
+            
+            // الحالة 3: شغال بالكامل (كلاهما موثق)
+            if (emailVerified && phoneVerified) {
+                return {
+                    status: 'working',
+                    email: '✅',
+                    phone: '✅',
+                    nitro: data.premium_type > 0 ? '💎' : '❌',
+                    mfa: data.mfa_enabled ? '🔐' : '🔓',
+                    username: data.username,
+                    id: data.id,
+                    message: '✅ توكن شغال بالكامل - بريد وهاتف موثقين'
+                };
+            }
+            
+            // الحالة 4: غير موثق (كلاهما غير موثق)
+            if (!emailVerified && !phoneVerified) {
+                return {
+                    status: 'unverified',
+                    email: '🔒',
+                    phone: '🔒',
+                    nitro: '❌',
+                    mfa: '❌',
+                    username: data.username,
+                    id: data.id,
+                    message: '⚠️ حساب غير موثق - بريد وهاتف غير موثقين'
+                };
+            }
+            
+            // حالة افتراضية
+            return {
+                status: 'unknown',
+                email: '❓',
+                phone: '❓',
+                nitro: '❌',
+                mfa: '❌',
+                message: 'حالة غير معروفة'
+            };
+        }
+
+        // ==================== دالة فحص توكن واحد ====================
+        async function checkSingleToken(token) {
+            try {
+                const response = await fetch(DISCORD_API, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                // محاولة قراءة البيانات
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    data = { message: 'فشل قراءة الاستجابة' };
+                }
+
+                // إذا كان التوكن غير صالح
+                if (response.status === 401) {
+                    return {
+                        status: 'invalid',
+                        email: '❌',
+                        phone: '❌',
+                        nitro: '❌',
+                        mfa: '❌',
+                        message: '❌ توكن غير صالح'
+                    };
+                }
+
+                // إذا كان هناك خطأ آخر
+                if (!response.ok) {
+                    return {
+                        status: 'error',
+                        email: '⚠️',
+                        phone: '⚠️',
+                        nitro: '❌',
+                        mfa: '❌',
+                        message: data.message || `خطأ ${response.status}`
+                    };
+                }
+
+                // استخدم دالة التصنيف
+                const classification = classifyToken(data);
+                
+                // أضف البيانات الإضافية
+                return {
+                    token: token,
+                    ...classification
+                };
+
+            } catch (error) {
+                return {
+                    token: token,
+                    status: 'error',
+                    email: '⚠️',
+                    phone: '⚠️',
+                    nitro: '❌',
+                    mfa: '❌',
+                    message: '🌐 فشل الاتصال: ' + error.message
+                };
+            }
+        }
+
+        // ==================== الفحص الرئيسي ====================
         async function checkTokens() {
             const tokens = document.getElementById('tokensInput').value.split('\n')
                 .map(t => t.trim())
@@ -622,7 +725,33 @@
                 
                 try {
                     const result = await checkSingleToken(token);
-                    categorizeToken(token, result);
+                    
+                    // إضافة للنتائج حسب الحالة
+                    switch(result.status) {
+                        case 'working':
+                            results.working.push(token);
+                            break;
+                        case 'phoneLocked':
+                            results.phoneLocked.push(token);
+                            break;
+                        case 'emailLocked':
+                            results.emailLocked.push(token);
+                            break;
+                        case 'unverified':
+                            results.unverified.push(token);
+                            break;
+                        case 'invalid':
+                            results.invalid.push(token);
+                            break;
+                        default:
+                            results.errors.push(token);
+                    }
+                    
+                    allResults.push({
+                        token: token,
+                        ...result
+                    });
+                    
                 } catch (error) {
                     results.errors.push(token);
                     allResults.push({
@@ -653,213 +782,14 @@
                 `آخر تحديث: ${new Date().toLocaleTimeString('ar-EG')}`;
         }
 
-        // ==================== دالة فحص توكن واحد مع كشف Verify Phone بدقة ====================
-        async function checkSingleToken(token) {
-            try {
-                const response = await fetch(DISCORD_API, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                    }
-                });
-
-                // محاولة قراءة البيانات
-                let data;
-                try {
-                    data = await response.json();
-                } catch (e) {
-                    data = { message: 'فشل قراءة الاستجابة' };
-                }
-
-                // ========== كشف الحالات بدقة ==========
-                
-                // 1. توكن صالح (200)
-                if (response.status === 200 && data.id) {
-                    const phoneVerified = !!data.phone;
-                    const emailVerified = data.verified === true;
-                    
-                    // تحديد الحالة بناءً على التوثيق
-                    if (emailVerified && phoneVerified) {
-                        // الحالة: شغال بالكامل
-                        return {
-                            status: 'working',
-                            email: '✅',
-                            phone: '✅',
-                            nitro: data.premium_type > 0 ? '💎' : '❌',
-                            mfa: data.mfa_enabled ? '🔐' : '🔓',
-                            username: data.username,
-                            id: data.id,
-                            message: '✅ توكن شغال بالكامل'
-                        };
-                    } 
-                    else if (emailVerified && !phoneVerified) {
-                        // الحالة: Verify Phone - البريد موثق والهاتف لا
-                        return {
-                            status: 'phoneLocked',
-                            email: '✅',
-                            phone: '🔒',
-                            nitro: data.premium_type > 0 ? '💎' : '❌',
-                            mfa: data.mfa_enabled ? '🔐' : '🔓',
-                            username: data.username,
-                            id: data.id,
-                            message: '📱 Verify Phone - يحتاج توثيق هاتف'
-                        };
-                    }
-                    else if (!emailVerified && phoneVerified) {
-                        // الحالة: بريد غير موثق
-                        return {
-                            status: 'emailLocked',
-                            email: '🔒',
-                            phone: '✅',
-                            nitro: data.premium_type > 0 ? '💎' : '❌',
-                            mfa: data.mfa_enabled ? '🔐' : '🔓',
-                            username: data.username,
-                            id: data.id,
-                            message: '🔒 بريد غير موثق'
-                        };
-                    }
-                    else {
-                        // الحالة: لا بريد ولا هاتف
-                        return {
-                            status: 'invalid',
-                            email: '🔒',
-                            phone: '🔒',
-                            nitro: '❌',
-                            mfa: '❌',
-                            message: '⚠️ حساب غير مكتمل'
-                        };
-                    }
-                }
-                
-                // 2. Verify Phone من خلال استجابة 403
-                if (response.status === 403) {
-                    // التحقق من وجود phone_verify في الاستجابة
-                    if (data.phone_verify || 
-                        (data.message && data.message.includes('verify your account')) ||
-                        data.code === 40002) {
-                        
-                        return {
-                            status: 'phoneLocked',
-                            email: '✅',
-                            phone: '🔒',
-                            nitro: '❌',
-                            mfa: '❌',
-                            message: '📱 Verify Phone - الحساب موجود لكن يحتاج توثيق هاتف'
-                        };
-                    }
-                    
-                    // التحقق من كابتشا
-                    if (data.captcha_key) {
-                        return {
-                            status: 'captcha',
-                            email: '⚠️',
-                            phone: '⚠️',
-                            nitro: '❌',
-                            mfa: '❌',
-                            message: '🤖 يحتاج حل كابتشا'
-                        };
-                    }
-                    
-                    // حساب محظور
-                    return {
-                        status: 'banned',
-                        email: '⛔',
-                        phone: '⛔',
-                        nitro: '❌',
-                        mfa: '❌',
-                        message: '⛔ حساب محظور أو مقفول'
-                    };
-                }
-                
-                // 3. توكن غير صالح (401)
-                if (response.status === 401) {
-                    return {
-                        status: 'invalid',
-                        email: '❌',
-                        phone: '❌',
-                        nitro: '❌',
-                        mfa: '❌',
-                        message: '❌ توكن غير صالح'
-                    };
-                }
-                
-                // 4. Rate limiting
-                if (response.status === 429) {
-                    return {
-                        status: 'rate_limit',
-                        email: '⏳',
-                        phone: '⏳',
-                        nitro: '❌',
-                        mfa: '❌',
-                        message: '⏳ تم تجاوز الحد'
-                    };
-                }
-                
-                // 5. أي حالة أخرى
-                return {
-                    status: 'error',
-                    email: '⚠️',
-                    phone: '⚠️',
-                    nitro: '❌',
-                    mfa: '❌',
-                    message: data.message || `⚠️ حالة غير معروفة (${response.status})`
-                };
-
-            } catch (error) {
-                return {
-                    status: 'error',
-                    email: '⚠️',
-                    phone: '⚠️',
-                    nitro: '❌',
-                    mfa: '❌',
-                    message: '🌐 فشل الاتصال: ' + error.message
-                };
-            }
-        }
-
-        // ==================== تصنيف التوكن ====================
-        function categorizeToken(token, result) {
-            // إضافة للنتائج حسب الحالة
-            switch(result.status) {
-                case 'working':
-                    results.working.push(token);
-                    break;
-                case 'emailLocked':
-                    results.emailLocked.push(token);
-                    break;
-                case 'phoneLocked':
-                    results.phoneLocked.push(token);
-                    break;
-                case 'captcha':
-                    results.captcha.push(token);
-                    break;
-                case 'invalid':
-                    results.invalid.push(token);
-                    break;
-                case 'banned':
-                    results.banned.push(token);
-                    break;
-                default:
-                    results.errors.push(token);
-            }
-            
-            allResults.push({
-                token: token,
-                ...result
-            });
-        }
-
         // ==================== إعادة تعيين النتائج ====================
         function resetResults() {
             results = {
                 working: [],
-                emailLocked: [],
                 phoneLocked: [],
-                captcha: [],
+                emailLocked: [],
+                unverified: [],
                 invalid: [],
-                banned: [],
                 errors: []
             };
             allResults = [];
@@ -868,11 +798,10 @@
         // ==================== تحديث الواجهة ====================
         function updateUI() {
             document.getElementById('workingCount').textContent = results.working.length;
-            document.getElementById('emailLockedCount').textContent = results.emailLocked.length;
             document.getElementById('phoneLockedCount').textContent = results.phoneLocked.length;
-            document.getElementById('captchaCount').textContent = results.captcha.length;
+            document.getElementById('emailLockedCount').textContent = results.emailLocked.length;
+            document.getElementById('unverifiedCount').textContent = results.unverified.length;
             document.getElementById('invalidCount').textContent = results.invalid.length;
-            document.getElementById('bannedCount').textContent = results.banned.length;
             document.getElementById('errorsCount').textContent = results.errors.length;
 
             const tbody = document.getElementById('resultsTableBody');
@@ -892,28 +821,24 @@
                 
                 switch(item.status) {
                     case 'working':
-                        statusText = '✅ شغال';
+                        statusText = '✅ شغال بالكامل';
                         statusClass = 'text-green-400';
                         break;
-                    case 'emailLocked':
-                        statusText = '🔒 بريد غير موثق';
+                    case 'phoneLocked':
+                        statusText = '📱 Phone Locked';
                         statusClass = 'text-orange-400';
                         break;
-                    case 'phoneLocked':
-                        statusText = '📱 Verify Phone';
-                        statusClass = 'text-red-400';
+                    case 'emailLocked':
+                        statusText = '🔒 Email Locked';
+                        statusClass = 'text-blue-400';
                         break;
-                    case 'captcha':
-                        statusText = '🤖 كابتشا';
-                        statusClass = 'text-purple-400';
+                    case 'unverified':
+                        statusText = '⚠️ غير موثق';
+                        statusClass = 'text-gray-400';
                         break;
                     case 'invalid':
                         statusText = '❌ غير صالح';
-                        statusClass = 'text-gray-400';
-                        break;
-                    case 'banned':
-                        statusText = '⛔ محظور';
-                        statusClass = 'text-red-600';
+                        statusClass = 'text-red-400';
                         break;
                     default:
                         statusText = '⚠️ خطأ';
@@ -922,7 +847,7 @@
 
                 row.innerHTML = `
                     <td class="py-3 px-4 text-white/60">${index + 1}</td>
-                    <td class="py-3 px-4 font-mono text-sm">${item.token.substring(0, 30)}...</td>
+                    <td class="py-3 px-4 font-mono text-sm">${item.token ? item.token.substring(0, 30) + '...' : '---'}</td>
                     <td class="py-3 px-4"><span class="font-semibold ${statusClass}">${statusText}</span></td>
                     <td class="py-3 px-4">${item.email || '❌'}</td>
                     <td class="py-3 px-4">${item.phone || '❌'}</td>
@@ -947,12 +872,11 @@
             let title = '';
             
             const typeMap = {
-                'working': { list: results.working, title: 'التوكنات الشغالة ✅' },
-                'emailLocked': { list: results.emailLocked, title: 'التوكنات مع بريد غير موثق 🔒' },
-                'phoneLocked': { list: results.phoneLocked, title: 'التوكنات التي تحتاج Verify Phone 📱' },
-                'captcha': { list: results.captcha, title: 'التوكنات التي تحتاج كابتشا 🤖' },
+                'working': { list: results.working, title: 'التوكنات الشغالة بالكامل ✅' },
+                'phoneLocked': { list: results.phoneLocked, title: 'التوكنات Phone Locked 📱' },
+                'emailLocked': { list: results.emailLocked, title: 'التوكنات Email Locked 🔒' },
+                'unverified': { list: results.unverified, title: 'التوكنات غير الموثقة ⚠️' },
                 'invalid': { list: results.invalid, title: 'التوكنات غير الصالحة ❌' },
-                'banned': { list: results.banned, title: 'التوكنات المحظورة ⛔' },
                 'errors': { list: results.errors, title: 'التوكنات مع أخطاء ⚠️' }
             };
             
@@ -978,7 +902,7 @@
                             </button>
                         </div>
                         <div class="token-text">${token}</div>
-                        ${details && details.message ? `<div class="text-sm ${details.status === 'phoneLocked' ? 'text-red-400' : 'text-orange-400'}">${details.message}</div>` : ''}
+                        ${details && details.message ? `<div class="text-sm ${details.status === 'phoneLocked' ? 'text-orange-400' : details.status === 'emailLocked' ? 'text-blue-400' : 'text-gray-400'}">${details.message}</div>` : ''}
                     </div>
                 `;
             });
@@ -1030,11 +954,10 @@
             let list = [];
             switch(type) {
                 case 'working': list = results.working; break;
-                case 'emailLocked': list = results.emailLocked; break;
                 case 'phoneLocked': list = results.phoneLocked; break;
-                case 'captcha': list = results.captcha; break;
+                case 'emailLocked': list = results.emailLocked; break;
+                case 'unverified': list = results.unverified; break;
                 case 'invalid': list = results.invalid; break;
-                case 'banned': list = results.banned; break;
                 case 'errors': list = results.errors; break;
             }
             
@@ -1068,51 +991,13 @@
             URL.revokeObjectURL(url);
         }
 
-        function showAdvancedStats() {
-            if (allResults.length === 0) {
-                showError('لا توجد نتائج');
-                return;
-            }
-            
-            const total = allResults.length;
-            const working = results.working.length;
-            const phoneLocked = results.phoneLocked.length;
-            
-            document.getElementById('statsContent').innerHTML = `
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white/5 p-4 rounded-xl">
-                        <div class="text-white/40">إجمالي</div>
-                        <div class="text-3xl font-bold">${total}</div>
-                    </div>
-                    <div class="bg-white/5 p-4 rounded-xl">
-                        <div class="text-white/40">شغال</div>
-                        <div class="text-3xl font-bold text-green-400">${working}</div>
-                    </div>
-                    <div class="bg-white/5 p-4 rounded-xl">
-                        <div class="text-white/40">Verify Phone</div>
-                        <div class="text-3xl font-bold text-red-400">${phoneLocked}</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('statsModal').classList.add('show');
-        }
-
         // ==================== دوال الإغلاق ====================
         function closeModal() {
             document.getElementById('viewModal').classList.remove('show');
         }
 
-        function closeStatsModal() {
-            document.getElementById('statsModal').classList.remove('show');
-        }
-
         document.getElementById('viewModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
-        });
-        
-        document.getElementById('statsModal').addEventListener('click', function(e) {
-            if (e.target === this) closeStatsModal();
         });
     </script>
 </body>
