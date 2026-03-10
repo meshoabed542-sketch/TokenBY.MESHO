@@ -19,19 +19,16 @@
             min-height: 100vh;
         }
         
-        /* تخصيص شريط التمرير */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
         
-        /* تأثير البطاقات */
         .stat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
         }
         
-        /* زر الفحص */
         .check-btn {
             background: linear-gradient(45deg, #4f46e5, #7c3aed);
             transition: all 0.3s ease;
@@ -45,129 +42,64 @@
             cursor: not-allowed;
         }
         
-        /* نافذة العرض المنبثقة */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; visibility: hidden;
             transition: all 0.3s ease;
         }
-        .modal-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
         .modal-content {
             background: linear-gradient(135deg, #2a2a40 0%, #1e1e2f 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+            max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto;
+            transform: scale(0.9); transition: transform 0.3s ease;
         }
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
+        .modal-overlay.show .modal-content { transform: scale(1); }
         
-        /* تنسيق محتوى النافذة */
         .token-detail-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-        }
-        .token-detail-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(124, 58, 237, 0.3);
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 16px; margin-bottom: 12px;
         }
         .token-detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 12px;
         }
         .token-index {
             background: linear-gradient(45deg, #4f46e5, #7c3aed);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px;
         }
         .copy-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px; padding: 6px 12px; font-size: 13px;
+            display: flex; align-items: center; gap: 6px; cursor: pointer;
+            transition: all 0.3s ease; color: white;
         }
-        .copy-btn:hover {
-            background: rgba(124, 58, 237, 0.3);
-            border-color: #7c3aed;
-        }
+        .copy-btn:hover { background: rgba(124, 58, 237, 0.3); border-color: #7c3aed; }
         .token-text {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 12px;
-            word-break: break-all;
-            color: #a5b4fc;
-            margin-bottom: 12px;
+            background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px;
+            font-family: monospace; font-size: 12px; word-break: break-all;
+            color: #a5b4fc; margin-bottom: 12px;
         }
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            margin-top: 12px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px; margin-top: 12px;
         }
         .info-badge {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 8px;
-            text-align: center;
-            font-size: 13px;
+            background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px;
+            text-align: center; font-size: 13px;
         }
         .info-badge.good { color: #4ade80; }
         .info-badge.bad { color: #f87171; }
         .info-badge.neutral { color: #fbbf24; }
         
-        /* الإشعارات */
         .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 24px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
-            z-index: 2000;
-            animation: slideDown 0.3s ease;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            padding: 12px 24px; border-radius: 12px; color: white;
+            font-weight: 500; z-index: 2000; animation: slideDown 0.3s ease;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
         .notification.success { background: linear-gradient(135deg, #10b981, #059669); }
@@ -175,54 +107,30 @@
         .notification.info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -20px);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
         }
         
-        /* زر النسخ في الجدول */
         .copy-row-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 6px;
-            padding: 4px 8px;
-            color: white;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 2px;
+            background: rgba(255,255,255,0.1); border: none; border-radius: 6px;
+            padding: 4px 8px; color: white; font-size: 12px;
+            display: inline-flex; align-items: center; gap: 4px;
+            cursor: pointer; transition: all 0.2s ease; margin: 2px;
         }
-        .copy-row-btn:hover {
-            background: rgba(124, 58, 237, 0.3);
-        }
+        .copy-row-btn:hover { background: rgba(124, 58, 237, 0.3); }
         
-        /* رسائل الخطأ */
         .error-message {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.5);
+            background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.5);
             color: #fecaca;
         }
         
-        /* شريط التقدم */
         .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
+            width: 100%; height: 4px;
+            background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
             margin-top: 8px;
         }
         .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            height: 100%; background: linear-gradient(90deg, #4f46e5, #7c3aed);
             transition: width 0.3s ease;
         }
     </style>
@@ -249,44 +157,34 @@
                 <span class="text-white/40 text-sm">(توكن واحد في كل سطر)</span>
             </div>
             
-            <!-- منطقة النص -->
             <textarea id="tokensInput" 
                       class="w-full h-40 bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-white/30 focus:outline-none focus:border-purple-400 transition resize-none font-mono text-sm"
                       placeholder="أدخل التوكنات هنا..."></textarea>
             
-            <!-- شريط التقدم -->
             <div id="progressBar" class="progress-bar hidden">
                 <div id="progressFill" class="progress-fill" style="width: 0%"></div>
             </div>
             
-            <!-- شريط الأدوات -->
             <div class="flex flex-wrap justify-between items-center mt-4 gap-3">
                 <div class="flex gap-2">
                     <button onclick="pasteTokens()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
-                        <i class="fas fa-paste"></i>
-                        لصق
+                        <i class="fas fa-paste"></i> لصق
                     </button>
                     <button onclick="clearTokens()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
-                        <i class="fas fa-trash"></i>
-                        مسح
+                        <i class="fas fa-trash"></i> مسح
                     </button>
                     <button onclick="loadExample()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm flex items-center gap-2 transition">
-                        <i class="fas fa-file-alt"></i>
-                        نموذج
+                        <i class="fas fa-file-alt"></i> نموذج
                     </button>
                 </div>
                 
-                <!-- زر الفحص الرئيسي -->
                 <button onclick="checkTokens()" id="checkBtn" class="check-btn px-8 py-3 rounded-xl text-white font-bold flex items-center gap-3 shadow-lg">
                     <i class="fas fa-magic"></i>
                     <span>فحص التوكنات</span>
-                    <span id="loadingSpinner" class="hidden">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </span>
+                    <span id="loadingSpinner" class="hidden"><i class="fas fa-spinner fa-spin"></i></span>
                 </button>
             </div>
 
-            <!-- رسالة الخطأ -->
             <div id="errorMessage" class="error-message hidden mt-4 p-3 rounded-lg text-sm"></div>
         </div>
 
@@ -302,9 +200,8 @@
             </div>
         </div>
 
-        <!-- بطاقات النتائج - 9 بطاقات -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
-            
+        <!-- بطاقات النتائج -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
             <!-- شغال -->
             <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
@@ -385,7 +282,7 @@
                 </div>
             </div>
 
-            <!-- أخطاء -->
+            <!-- أخطاء اتصال -->
             <div class="stat-card bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-5 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -394,7 +291,7 @@
                     <span class="text-3xl font-bold" id="errorsCount">0</span>
                 </div>
                 <div class="text-sm opacity-90">أخطاء ⚠️</div>
-                <div class="text-xs opacity-75">فشل في الاتصال</div>
+                <div class="text-xs opacity-75">فشل الاتصال أو CORS</div>
                 <div class="mt-3 flex gap-2">
                     <button onclick="downloadResults('errors')" class="flex-1 bg-white/20 hover:bg-white/30 rounded-lg py-1 text-xs flex items-center justify-center gap-1 transition">
                         <i class="fas fa-download"></i> تحميل
@@ -403,6 +300,18 @@
                         <i class="fas fa-eye"></i> عرض
                     </button>
                 </div>
+            </div>
+
+            <!-- بطاقة إضافية للبروكسيات (اختيارية) -->
+            <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-globe text-xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="proxyStatus">✓</span>
+                </div>
+                <div class="text-sm opacity-90">البروكسيات</div>
+                <div class="text-xs opacity-75" id="proxyCount">يعمل بـ 5 بروكسيات</div>
             </div>
         </div>
 
@@ -421,7 +330,6 @@
                 </div>
             </div>
             
-            <!-- الجدول -->
             <div class="overflow-x-auto">
                 <table class="w-full text-white">
                     <thead>
@@ -437,12 +345,7 @@
                         </tr>
                     </thead>
                     <tbody id="resultsTableBody">
-                        <tr>
-                            <td colspan="8" class="text-center py-8 text-white/40">
-                                <i class="fas fa-inbox text-4xl mb-3 block"></i>
-                                لا توجد نتائج، أدخل توكنات للفحص
-                            </td>
-                        </tr>
+                        <tr><td colspan="8" class="text-center py-8 text-white/40"><i class="fas fa-inbox text-4xl mb-3 block"></i>لا توجد نتائج</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -457,21 +360,25 @@
                     <i class="fas fa-list text-purple-400"></i>
                     <span id="modalTitle">نتائج الفحص</span>
                 </h3>
-                <button onclick="closeModal()" class="text-white/60 hover:text-white transition text-xl">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button onclick="closeModal()" class="text-white/60 hover:text-white transition text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <div id="modalContent" class="space-y-3">
-                <!-- المحتوى هنا -->
-            </div>
+            <div id="modalContent" class="space-y-3"></div>
         </div>
     </div>
 
     <script>
         // ==================== الإعدادات الأساسية ====================
         const DISCORD_API = 'https://discord.com/api/v9/users/@me';
-        const BILLING_API = 'https://discord.com/api/v9/users/@me/billing/payment-sources';
         
+        // قائمة البروكسيات المجانية (إذا فشل واحد، نجرب التالي)
+        const PROXY_LIST = [
+            'https://corsproxy.io/?',
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://yacdn.org/proxy/',
+            'https://thingproxy.freeboard.io/fetch/'
+        ];
+
         let results = {
             working: [],
             emailLocked: [],
@@ -497,249 +404,170 @@
                 '';
         }
 
-        // ==================== دالة النوم ====================
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-        // ==================== دالة الإشعارات ====================
         function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            const n = document.createElement('div');
+            n.className = `notification ${type}`;
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
         }
 
-        // ==================== دالة عرض الخطأ ====================
         function showError(msg) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = msg;
-            errorDiv.classList.remove('hidden');
-            setTimeout(() => errorDiv.classList.add('hidden'), 5000);
+            const e = document.getElementById('errorMessage');
+            e.textContent = msg;
+            e.classList.remove('hidden');
+            setTimeout(() => e.classList.add('hidden'), 5000);
         }
 
-        // ==================== حساب العمر من Discord ID ====================
+        // ==================== دوال المساعدة ====================
         function calculateAgeFromId(discordId) {
             if (!discordId) return null;
             try {
                 const timestamp = (BigInt(discordId) / 4194304n) + 1420070400000n;
                 const creationDate = new Date(Number(timestamp));
                 const now = new Date();
-                
                 const diffTime = Math.abs(now - creationDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 const diffYears = (diffDays / 365).toFixed(1);
-                
                 return {
                     date: creationDate.toISOString().split('T')[0],
                     days: diffDays,
                     years: diffYears,
                     fullDate: creationDate.toLocaleDateString('ar-EG', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
+                        year: 'numeric', month: 'long', day: 'numeric'
                     })
                 };
-            } catch (e) {
-                return null;
-            }
+            } catch { return null; }
         }
 
-        // ==================== دالة فحص الفلاج ====================
         function checkFlags(userData) {
             const flags = [];
             const publicFlags = userData.public_flags || 0;
-            
             const flagMap = {
-                1: 'Staff',
-                2: 'Partner',
-                4: 'HypeSquad Events',
-                8: 'Bug Hunter Level 1',
-                64: 'HypeSquad Bravery',
-                128: 'HypeSquad Brilliance',
-                256: 'HypeSquad Balance',
-                512: 'Early Supporter',
-                16384: 'Bug Hunter Level 2',
-                131072: 'Verified Bot Developer',
-                4194304: 'Active Developer'
+                1: 'Staff', 2: 'Partner', 4: 'HypeSquad Events',
+                8: 'Bug Hunter Level 1', 64: 'HypeSquad Bravery',
+                128: 'HypeSquad Brilliance', 256: 'HypeSquad Balance',
+                512: 'Early Supporter', 16384: 'Bug Hunter Level 2',
+                131072: 'Verified Bot Developer', 4194304: 'Active Developer'
             };
-            
             for (const [bit, name] of Object.entries(flagMap)) {
-                if (publicFlags & parseInt(bit)) {
-                    flags.push(name);
-                }
+                if (publicFlags & parseInt(bit)) flags.push(name);
             }
-            
             return flags;
         }
 
-        // ==================== دالة التصنيف ====================
-        function classifyToken(data) {
-            if (!data || !data.id) {
-                return {
-                    status: 'invalid',
-                    email: '❌',
-                    phone: '❌',
-                    nitro: '❌',
-                    mfa: '❌',
-                    message: '❌ توكن غير صالح'
-                };
+        // ==================== دالة فحص توكن واحد مع البروكسيات ====================
+        async function checkSingleToken(token) {
+            // نجرب كل بروكسي بالترتيب
+            for (let i = 0; i < PROXY_LIST.length; i++) {
+                const proxy = PROXY_LIST[i];
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 8000); // مهلة 8 ثوان لكل بروكسي
+                    
+                    const response = await fetch(proxy + encodeURIComponent(DISCORD_API), {
+                        headers: { 'Authorization': token },
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeout);
+                    
+                    if (!response.ok) {
+                        // إذا كان 401، التوكن غير صالح (لا داعي لتجربة بروكسيات أخرى)
+                        if (response.status === 401) {
+                            return {
+                                token: token,
+                                status: 'invalid',
+                                email: '❌',
+                                phone: '❌',
+                                nitro: '❌',
+                                mfa: '❌',
+                                message: '❌ توكن غير صالح (401)'
+                            };
+                        }
+                        // إذا كان خطأ آخر (مثلاً 403)، نكمل التجربة مع البروكسي التالي
+                        continue;
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // توكن صالح - نصنفه
+                    const classification = classifyTokenData(data);
+                    return {
+                        token: token,
+                        ...classification,
+                        age: calculateAgeFromId(data.id),
+                        flags: checkFlags(data)
+                    };
+                    
+                } catch (error) {
+                    // فشل الاتصال بهذا البروكسي، جرب التالي
+                    console.log(`البروكسي ${proxy} فشل:`, error.message);
+                }
             }
+            
+            // إذا فشلت كل البروكسيات
+            return {
+                token: token,
+                status: 'error',
+                email: '⚠️',
+                phone: '⚠️',
+                nitro: '❌',
+                mfa: '❌',
+                message: '🌐 فشل الاتصال بجميع البروكسيات'
+            };
+        }
 
+        // تصنيف بيانات التوكن
+        function classifyTokenData(data) {
+            if (!data || !data.id) {
+                return { status: 'invalid', email: '❌', phone: '❌', nitro: '❌', mfa: '❌', message: '❌ بيانات غير صالحة' };
+            }
             const emailVerified = data.verified === true;
             const phoneVerified = !!data.phone;
             
             if (emailVerified && !phoneVerified) {
                 return {
-                    status: 'phoneLocked',
-                    email: '✅',
-                    phone: '🔒',
+                    status: 'phoneLocked', email: '✅', phone: '🔒',
                     nitro: data.premium_type > 0 ? '💎' : '❌',
                     mfa: data.mfa_enabled ? '🔐' : '🔓',
-                    username: data.username,
-                    id: data.id,
+                    username: data.username, id: data.id,
                     message: '📱 Phone Locked - بريد موثق - هاتف غير موثق'
                 };
             }
-            
             if (!emailVerified && phoneVerified) {
                 return {
-                    status: 'emailLocked',
-                    email: '🔒',
-                    phone: '✅',
+                    status: 'emailLocked', email: '🔒', phone: '✅',
                     nitro: data.premium_type > 0 ? '💎' : '❌',
                     mfa: data.mfa_enabled ? '🔐' : '🔓',
-                    username: data.username,
-                    id: data.id,
+                    username: data.username, id: data.id,
                     message: '🔒 Email Locked - بريد غير موثق - هاتف موثق'
                 };
             }
-            
             if (emailVerified && phoneVerified) {
                 return {
-                    status: 'working',
-                    email: '✅',
-                    phone: '✅',
+                    status: 'working', email: '✅', phone: '✅',
                     nitro: data.premium_type > 0 ? '💎' : '❌',
                     mfa: data.mfa_enabled ? '🔐' : '🔓',
-                    username: data.username,
-                    id: data.id,
+                    username: data.username, id: data.id,
                     message: '✅ توكن شغال بالكامل'
                 };
             }
-            
-            if (!emailVerified && !phoneVerified) {
-                return {
-                    status: 'invalid',
-                    email: '🔒',
-                    phone: '🔒',
-                    nitro: '❌',
-                    mfa: '❌',
-                    username: data.username,
-                    id: data.id,
-                    message: '⚠️ حساب غير موثق'
-                };
-            }
-            
+            // غير موثق (كلاهما غير موثق)
             return {
-                status: 'unknown',
-                email: '❓',
-                phone: '❓',
-                nitro: '❌',
-                mfa: '❌',
-                message: 'حالة غير معروفة'
+                status: 'invalid', email: '🔒', phone: '🔒',
+                nitro: '❌', mfa: '❌',
+                username: data.username, id: data.id,
+                message: '⚠️ حساب غير موثق'
             };
-        }
-
-        // ==================== دالة فحص توكن واحد ====================
-        async function checkSingleToken(token) {
-            try {
-                const response = await fetch(DISCORD_API, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                    }
-                });
-
-                let data;
-                try {
-                    data = await response.json();
-                } catch (e) {
-                    data = { message: 'فشل قراءة الاستجابة' };
-                }
-
-                if (response.status === 401) {
-                    return {
-                        token: token,
-                        status: 'invalid',
-                        email: '❌',
-                        phone: '❌',
-                        nitro: '❌',
-                        mfa: '❌',
-                        message: '❌ توكن غير صالح'
-                    };
-                }
-
-                if (!response.ok) {
-                    return {
-                        token: token,
-                        status: 'error',
-                        email: '⚠️',
-                        phone: '⚠️',
-                        nitro: '❌',
-                        mfa: '❌',
-                        message: data.message || `خطأ ${response.status}`
-                    };
-                }
-
-                const classification = classifyToken(data);
-                const ageInfo = calculateAgeFromId(data.id);
-                const flags = checkFlags(data);
-                
-                let hasPayment = false;
-                try {
-                    const billingResponse = await fetch(BILLING_API, {
-                        headers: { 'Authorization': token }
-                    });
-                    if (billingResponse.ok) {
-                        const billingData = await billingResponse.json();
-                        hasPayment = billingData.length > 0;
-                    }
-                } catch (e) {}
-
-                return {
-                    token: token,
-                    ...classification,
-                    age: ageInfo,
-                    flags: flags,
-                    hasPayment: hasPayment,
-                    payment: hasPayment ? '💳' : '❌'
-                };
-
-            } catch (error) {
-                return {
-                    token: token,
-                    status: 'error',
-                    email: '⚠️',
-                    phone: '⚠️',
-                    nitro: '❌',
-                    mfa: '❌',
-                    message: '🌐 فشل الاتصال: ' + error.message
-                };
-            }
         }
 
         // ==================== الفحص الرئيسي ====================
         async function checkTokens() {
             const tokens = document.getElementById('tokensInput').value.split('\n')
-                .map(t => t.trim())
-                .filter(t => t.length > 0);
+                .map(t => t.trim()).filter(t => t.length > 0);
             
             if (tokens.length === 0) {
                 showError('الرجاء إدخال توكنات للفحص');
@@ -757,7 +585,6 @@
 
             const batchSize = 10;
             const batches = [];
-            
             for (let i = 0; i < tokens.length; i += batchSize) {
                 batches.push(tokens.slice(i, i + batchSize));
             }
@@ -766,39 +593,17 @@
                 const batch = batches[i];
                 
                 await Promise.all(batch.map(async (token) => {
-                    try {
-                        const result = await checkSingleToken(token);
-                        
-                        switch(result.status) {
-                            case 'working':
-                                results.working.push(token);
-                                break;
-                            case 'emailLocked':
-                                results.emailLocked.push(token);
-                                break;
-                            case 'phoneLocked':
-                                results.phoneLocked.push(token);
-                                break;
-                            case 'invalid':
-                                results.invalid.push(token);
-                                break;
-                            default:
-                                results.errors.push(token);
-                        }
-                        
-                        allResults.push({
-                            token: token,
-                            ...result
-                        });
-                        
-                    } catch (error) {
-                        results.errors.push(token);
-                        allResults.push({
-                            token: token,
-                            status: 'error',
-                            message: 'خطأ في الاتصال'
-                        });
+                    const result = await checkSingleToken(token);
+                    
+                    switch(result.status) {
+                        case 'working': results.working.push(token); break;
+                        case 'emailLocked': results.emailLocked.push(token); break;
+                        case 'phoneLocked': results.phoneLocked.push(token); break;
+                        case 'invalid': results.invalid.push(token); break;
+                        default: results.errors.push(token);
                     }
+                    
+                    allResults.push({ token: token, ...result });
                 }));
 
                 updateUI();
@@ -817,22 +622,14 @@
             document.getElementById('lastUpdate').textContent = 
                 `آخر تحديث: ${new Date().toLocaleTimeString('ar-EG')}`;
             
-            console.log('النتائج:', results);
+            document.getElementById('proxyCount').textContent = `يعمل بـ ${PROXY_LIST.length} بروكسيات`;
         }
 
-        // ==================== إعادة تعيين النتائج ====================
         function resetResults() {
-            results = {
-                working: [],
-                emailLocked: [],
-                phoneLocked: [],
-                invalid: [],
-                errors: []
-            };
+            results = { working: [], emailLocked: [], phoneLocked: [], invalid: [], errors: [] };
             allResults = [];
         }
 
-        // ==================== تحديث الواجهة ====================
         function updateUI() {
             document.getElementById('workingCount').textContent = results.working.length;
             document.getElementById('emailLockedCount').textContent = results.emailLocked.length;
@@ -852,29 +649,13 @@
                 const row = document.createElement('tr');
                 row.className = 'border-b border-white/5 hover:bg-white/5 transition';
                 
-                let statusText = '';
-                let statusClass = '';
-                
+                let statusText = '', statusClass = '';
                 switch(item.status) {
-                    case 'working':
-                        statusText = '✅ شغال';
-                        statusClass = 'text-green-400';
-                        break;
-                    case 'emailLocked':
-                        statusText = '🔒 بريد مقفل';
-                        statusClass = 'text-orange-400';
-                        break;
-                    case 'phoneLocked':
-                        statusText = '📱 هاتف مقفل';
-                        statusClass = 'text-red-400';
-                        break;
-                    case 'invalid':
-                        statusText = '❌ غير صالح';
-                        statusClass = 'text-gray-400';
-                        break;
-                    default:
-                        statusText = '⚠️ خطأ';
-                        statusClass = 'text-yellow-400';
+                    case 'working': statusText = '✅ شغال'; statusClass = 'text-green-400'; break;
+                    case 'emailLocked': statusText = '🔒 بريد مقفل'; statusClass = 'text-orange-400'; break;
+                    case 'phoneLocked': statusText = '📱 هاتف مقفل'; statusClass = 'text-red-400'; break;
+                    case 'invalid': statusText = '❌ غير صالح'; statusClass = 'text-gray-400'; break;
+                    default: statusText = '⚠️ خطأ'; statusClass = 'text-yellow-400';
                 }
 
                 row.innerHTML = `
@@ -886,23 +667,17 @@
                     <td class="py-3 px-4">${item.nitro || '❌'}</td>
                     <td class="py-3 px-4">${item.mfa || '❌'}</td>
                     <td class="py-3 px-4">
-                        <button class="copy-row-btn" onclick="copyToken('${item.token}')">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button class="copy-row-btn" onclick="viewDetails(${index})">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
+                        <button class="copy-row-btn" onclick="copyToken('${item.token}')"><i class="fas fa-copy"></i></button>
+                        <button class="copy-row-btn" onclick="viewDetails(${index})"><i class="fas fa-info-circle"></i></button>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
         }
 
-        // ==================== دوال العرض ====================
+        // ==================== دوال العرض والنسخ والتحميل ====================
         function viewResults(type) {
-            let list = [];
-            let title = '';
-            
+            let list = [], title = '';
             const typeMap = {
                 'working': { list: results.working, title: 'التوكنات الشغالة ✅' },
                 'emailLocked': { list: results.emailLocked, title: 'التوكنات مع بريد مقفل 🔒' },
@@ -910,43 +685,29 @@
                 'invalid': { list: results.invalid, title: 'التوكنات غير الصالحة ❌' },
                 'errors': { list: results.errors, title: 'التوكنات مع أخطاء ⚠️' }
             };
-            
             const selected = typeMap[type];
             if (!selected || selected.list.length === 0) {
                 showError('لا توجد نتائج للعرض');
                 return;
             }
-            
             document.getElementById('modalTitle').textContent = selected.title;
             const modalContent = document.getElementById('modalContent');
             modalContent.innerHTML = '';
-            
             selected.list.forEach((token, index) => {
                 const details = allResults.find(r => r.token === token);
-                
-                let extraInfo = '';
-                if (details && details.age) {
-                    extraInfo = `<div class="text-xs text-blue-400 mt-1">📅 ${details.age.fullDate} (${details.age.years} سنة)</div>`;
-                }
-                if (details && details.flags && details.flags.length > 0) {
-                    extraInfo += `<div class="text-xs text-yellow-400 mt-1">🚩 ${details.flags.join(', ')}</div>`;
-                }
-                
                 modalContent.innerHTML += `
                     <div class="token-detail-item">
                         <div class="token-detail-header">
                             <div class="token-index">${index + 1}</div>
-                            <button class="copy-btn" onclick="copyToken('${token}')">
-                                <i class="fas fa-copy"></i> نسخ
-                            </button>
+                            <button class="copy-btn" onclick="copyToken('${token}')"><i class="fas fa-copy"></i> نسخ</button>
                         </div>
                         <div class="token-text">${token}</div>
                         ${details && details.message ? `<div class="text-sm ${details.status === 'working' ? 'text-green-400' : details.status === 'phoneLocked' ? 'text-red-400' : details.status === 'emailLocked' ? 'text-orange-400' : 'text-gray-400'}">${details.message}</div>` : ''}
-                        ${extraInfo}
+                        ${details && details.age ? `<div class="text-xs text-blue-400 mt-1">📅 ${details.age.fullDate} (${details.age.years} سنة)</div>` : ''}
+                        ${details && details.flags && details.flags.length ? `<div class="text-xs text-yellow-400 mt-1">🚩 ${details.flags.join(', ')}</div>` : ''}
                     </div>
                 `;
             });
-            
             document.getElementById('viewModal').classList.add('show');
         }
 
@@ -954,42 +715,29 @@
             const item = allResults[index];
             if (!item) return;
             
+            let ageHtml = item.age ? `
+                <div class="mt-3 p-3 bg-black/20 rounded-lg">
+                    <h4 class="font-bold mb-2 text-sm">📅 معلومات العمر:</h4>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>تاريخ الإنشاء: ${item.age.fullDate}</div>
+                        <div>العمر: ${item.age.years} سنة</div>
+                        <div>الأيام: ${item.age.days} يوم</div>
+                    </div>
+                </div>
+            ` : '';
+            let flagsHtml = item.flags && item.flags.length ? `
+                <div class="mt-3 p-3 bg-black/20 rounded-lg">
+                    <h4 class="font-bold mb-2 text-sm">🚩 الفلاج:</h4>
+                    <div class="flex flex-wrap gap-1">${item.flags.map(flag => `<span class="px-2 py-1 bg-yellow-500/20 rounded text-xs">${flag}</span>`).join('')}</div>
+                </div>
+            ` : '';
+
             document.getElementById('modalTitle').textContent = 'تفاصيل التوكن';
-            const modalContent = document.getElementById('modalContent');
-            
-            let ageHtml = '';
-            if (item.age) {
-                ageHtml = `
-                    <div class="mt-3 p-3 bg-black/20 rounded-lg">
-                        <h4 class="font-bold mb-2 text-sm">📅 معلومات العمر:</h4>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div>تاريخ الإنشاء: ${item.age.fullDate}</div>
-                            <div>العمر: ${item.age.years} سنة</div>
-                            <div>الأيام: ${item.age.days} يوم</div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            let flagsHtml = '';
-            if (item.flags && item.flags.length > 0) {
-                flagsHtml = `
-                    <div class="mt-3 p-3 bg-black/20 rounded-lg">
-                        <h4 class="font-bold mb-2 text-sm">🚩 الفلاج:</h4>
-                        <div class="flex flex-wrap gap-1">
-                            ${item.flags.map(flag => `<span class="px-2 py-1 bg-yellow-500/20 rounded text-xs">${flag}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            modalContent.innerHTML = `
+            document.getElementById('modalContent').innerHTML = `
                 <div class="token-detail-item">
                     <div class="token-detail-header">
                         <div class="token-index">${index + 1}</div>
-                        <button class="copy-btn" onclick="copyToken('${item.token}')">
-                            <i class="fas fa-copy"></i> نسخ
-                        </button>
+                        <button class="copy-btn" onclick="copyToken('${item.token}')"><i class="fas fa-copy"></i> نسخ</button>
                     </div>
                     <div class="token-text">${item.token}</div>
                     <div class="space-y-2">
@@ -999,7 +747,6 @@
                             <div>الهاتف: ${item.phone || '❌'}</div>
                             <div>Nitro: ${item.nitro || '❌'}</div>
                             <div>MFA: ${item.mfa || '❌'}</div>
-                            <div>وسائل دفع: ${item.payment || '❌'}</div>
                         </div>
                         ${item.id ? `<div class="text-xs text-white/40">المعرف: ${item.id}</div>` : ''}
                         ${item.username ? `<div class="text-xs text-white/40">الاسم: ${item.username}</div>` : ''}
@@ -1008,15 +755,10 @@
                     </div>
                 </div>
             `;
-            
             document.getElementById('viewModal').classList.add('show');
         }
 
-        // ==================== دوال النسخ والتحميل ====================
-        function copyToken(token) {
-            navigator.clipboard.writeText(token);
-            showNotification('✅ تم نسخ التوكن', 'success');
-        }
+        function copyToken(t) { navigator.clipboard.writeText(t); showNotification('✅ تم نسخ التوكن', 'success'); }
 
         function downloadResults(type) {
             let list = [];
@@ -1028,54 +770,31 @@
                 case 'errors': list = results.errors; break;
                 default: return;
             }
-            
-            if (list.length === 0) {
-                showError('لا توجد نتائج للتحميل');
-                return;
-            }
-            
+            if (list.length === 0) { showError('لا توجد نتائج للتحميل'); return; }
             const content = list.join('\n');
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `${type}_tokens_${new Date().toISOString().slice(0,10)}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            a.href = url; a.download = `${type}_tokens_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
             showNotification(`✅ تم تحميل ${list.length} توكن`, 'success');
         }
 
         function exportAll() {
-            if (allResults.length === 0) {
-                showError('لا توجد نتائج للتصدير');
-                return;
-            }
-            
+            if (allResults.length === 0) { showError('لا توجد نتائج للتصدير'); return; }
             const data = JSON.stringify(allResults, null, 2);
             const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `all_results_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            a.href = url; a.download = `all_results_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
             showNotification(`✅ تم تصدير ${allResults.length} نتيجة`, 'success');
         }
 
-        // ==================== دوال الإغلاق ====================
-        function closeModal() {
-            document.getElementById('viewModal').classList.remove('show');
-        }
-
-        document.getElementById('viewModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        function closeModal() { document.getElementById('viewModal').classList.remove('show'); }
+        document.getElementById('viewModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
     </script>
 </body>
-            </html>
+    </html>
